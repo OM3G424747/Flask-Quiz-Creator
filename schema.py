@@ -1,5 +1,7 @@
 import sqlite3
 
+# used to create initial tables project
+
 connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
 cursor = connection.cursor()
 

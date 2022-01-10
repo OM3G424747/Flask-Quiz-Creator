@@ -1,0 +1,16 @@
+{% extends "structure.html" %}
+
+{% block main %}
+<main class="form-signin">   
+    <h1>You are logged in</h1>
+
+    <br>
+    {{message | safe}}
+    <br>
+    <br>
+    <p><strong>Metrics to be loaded here ...</strong></p>
+
+    <a href="/logout">Log Out</a>
+</main> 
+
+{% endblock main %}

@@ -1,0 +1,15 @@
+html, body{
+    background-image: url(../static/img/background.jpg);
+
+}
+
+
+p {
+    color: #5a5a5a;
+}
+
+
+h1 {
+    color: #5a5a5a;
+
+}

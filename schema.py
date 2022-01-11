@@ -11,6 +11,7 @@ cursor.execute(
     pk INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(32),
     password VARCHAR(32),
+    email VARCHAR(32),
     secret_word VARCHAR(32)
     );
     """

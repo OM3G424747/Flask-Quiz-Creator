@@ -6,18 +6,18 @@ def show_word(email):
     cursor = connection.cursor()
     cursor.execute(
         f"""
-        SELECT hsname
+        SELECT username
         FROM users
         WHERE email = '{email}';
         """
     )
-    hsname = cursor.fetchone()[0]
+    username = cursor.fetchone()[0]
 
     connection.commit()
     cursor.close()
     connection.close()
 
-    message = f"{email}'s hsname is \"{hsname}\"."
+    message = f"{email}'s username is \"{username}\"."
     return message
 
 
@@ -26,7 +26,7 @@ def check_pass(email):
     cursor = connection.cursor()
     cursor.execute(
         f"""
-        SELECT password
+        SELECT pass
         FROM users
         WHERE email = '{email}';
         """
@@ -75,8 +75,8 @@ def check_users():
     return result
 
 
-# Not in use!!!
-def signup(username, password, secret_word):
+# used to sign up a new user
+def signup(username, password, email, firstname, lastname, displayname):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
     cursor.execute(
@@ -98,13 +98,20 @@ def signup(username, password, secret_word):
         f"""
         INSERT INTO users(
         username,
-        password,
-        secret_word
+        email,
+        pass,
+        firstname,
+        lastname,
+        displayname
+
         )
         VALUES(
         '{username}',
+        '{email}',
         '{password}',
-        '{secret_word}'
+        '{firstname}',
+        '{lastname}',
+        {displayname}
         );
         """
         )

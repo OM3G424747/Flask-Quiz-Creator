@@ -16,7 +16,7 @@ def home():
         admin_message = ""
         if session["username"] == "chris":
             admin_message = "You're the admin"
-        return render_template("mech.html", message = "<img src = static/img/8Hi2.gif>" + admin_message)
+        return render_template("dashboard.html", message = "<img src = static/img/8Hi2.gif>" + admin_message)
     return render_template("homepage.html", message = "Welcome!")
     
 
@@ -27,9 +27,9 @@ def before_request():
     if "username" in session:
         g.username = session["username"]
 
-# adds path to the hosted page (localhost7000/mech)
-@app.route("/mech", methods = ["GET"])
-def mech():
+# adds path to the hosted page (localhost7000/dashboard)
+@app.route("/dashboard", methods = ["GET"])
+def dashboard():
         if "username" in session:
             g.user = session["username"]
             message = "<img src = static/img/8Hi2.gif>"
@@ -39,7 +39,22 @@ def mech():
             else:
                 message += f"<br> <br> {model.show_word(session['username'])} "
 
-            return render_template("mech.html", message = message + admin_message)
+            return render_template("dashboard.html", message = message + admin_message)
+        else:
+            return render_template("homepage.html", message = "Welcome!")
+
+
+# adds path to the hosted page (localhost7000/dashboard)
+@app.route("/newquiz", methods = ["GET"])
+def newquiz():
+        if "username" in session:
+            g.user = session["username"]
+            message = "<img src = static/img/8Hi2.gif>"
+
+
+
+
+            return render_template("newquiz.html", message = message)
         else:
             return render_template("homepage.html", message = "Welcome!")
 
@@ -49,11 +64,11 @@ def login():
     message = ""
     if request.method == "POST":
         session.pop("username", None)
-        areyouuser = request.form["username"]
+        areyouuser = request.form["email"]
         pwd = request.form["password"]
         if pwd == model.check_pass(areyouuser):
-            session["username"] = request.form["username"]
-            return redirect(url_for("mech"))
+            session["username"] = request.form["email"]
+            return redirect(url_for("dashboard"))
         else:
             # returns if login fails
             message = "Wrong Username or Password"
@@ -72,8 +87,12 @@ def signup():
     else:
         username = request.form["username"]
         password = request.form["password"]
-        secret_word = request.form["secret_word"]
-        message = model.signup(username, password, secret_word)
+        email = request.form["email"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        displayname = request.form["displayname"]
+
+        message = model.signup(username, password, email, firstname, lastname, displayname)
         return render_template("signup.html", message = message)
 
 @app.route("/getsession")

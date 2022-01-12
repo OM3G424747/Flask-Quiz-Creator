@@ -1,0 +1,29 @@
+{% extends "structure.html" %}
+
+{% block main %}
+<main class="form-signin">   
+    <h1>You are logged in</h1>
+
+    <br>
+    {{message | safe}}
+    <br>
+    <br>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Testname</label>
+        <input type="text" class="form-control" id="testname" placeholder="Testname">
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Number of questions</label>
+        <input type="number" class="form-control" id="number" placeholder="Number of questions">
+    </div>
+    
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <br>
+    <a href="/dashboard">Dashboard</a>
+</main> 
+
+{% endblock main %}

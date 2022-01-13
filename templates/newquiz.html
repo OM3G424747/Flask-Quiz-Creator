@@ -4,23 +4,37 @@
 <main class="form-signin">   
     <h1>You are logged in</h1>
 
+    <!-- 
+        set numberand save number of questions to DB and Quiz name, 
+        loop through questions 
+        load 1 question per page
+        add return button or jump to question button
+        read "Prefilled value" from DB
+    
+    -->
+
     <br>
-    {{message | safe}}
     <br>
-    <br>
-    <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Testname</label>
-        <input type="text" class="form-control" id="testname" placeholder="Testname">
-    </div>
+    <form action="/newquiz" method="post"> 
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Testname</label>
+            <input type="text" class="form-control" name="testname" placeholder="Testname">
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Number of questions</label>
+            <input type="number" class="form-control" name="number" placeholder="Number of questions">
+        </div>
+
+        {{message | safe}}
+        
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Start Quiz</button>
+    
+    </form>
 
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Number of questions</label>
-        <input type="number" class="form-control" id="number" placeholder="Number of questions">
-    </div>
-    
-    <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <textarea class="form-control" id="description" rows="3"></textarea>
     </div>
     <br>
     <a href="/dashboard">Dashboard</a>

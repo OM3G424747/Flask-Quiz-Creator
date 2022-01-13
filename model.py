@@ -126,6 +126,22 @@ def signup(username, password, email, firstname, lastname, displayname):
     connection.close()
     return "User registered successfully."
 
+
+def set_question(num_of_questions):
+
+    html_to_return = ""
+
+    for i in range(num_of_questions):
+
+        html_to_return += """
+        <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+        <textarea class="form-control" id="description" rows="3"></textarea>
+        </div>
+        """
+
+    return html_to_return
+
 # generates a random password
 # used for first time account creation
 def set_password():

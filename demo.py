@@ -45,13 +45,19 @@ def dashboard():
 
 
 # adds path to the hosted page (localhost7000/dashboard)
-@app.route("/newquiz", methods = ["GET"])
+@app.route("/newquiz", methods = ["GET", "POST"])
 def newquiz():
         if "username" in session:
             g.user = session["username"]
-            message = "<img src = static/img/8Hi2.gif>"
+            message = ""
 
-
+            if request.method == "POST":
+                
+                message = request.form["testname"]
+                number = int(request.form["number"])
+                if number >= 1:
+                    message = model.set_question(number)
+                
 
 
             return render_template("newquiz.html", message = message)

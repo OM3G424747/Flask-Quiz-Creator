@@ -37,7 +37,7 @@ def dashboard():
             if session["username"] == "chris":
                 admin_message = "You're the admin"
             else:
-                message += f"<br> <br> {model.show_word(session['username'])} "
+                message += f" "
 
             return render_template("dashboard.html", message = message + admin_message)
         else:
@@ -49,18 +49,63 @@ def dashboard():
 def newquiz():
         if "username" in session:
             g.user = session["username"]
+            
+            # sets the number of questions to a static number of 2
             message = ""
 
             if request.method == "POST":
                 
-                message = request.form["testname"]
-                number = int(request.form["number"])
-                if number >= 1:
-                    message = model.set_question(number)
-                
+                #number = model.get_valid_num(request.form["number"])
+                #if number >= 1:
+                user_id = model.get_id(g.user)
+                quiz_name = request.form["testname"]
+                question_num = request.form["number"]
 
+                message = model.createquiz(user_id, quiz_name, question_num)
+                
+                    # tests the automatically incremented question numbers
+                    #print(request.form["number"])
+                    #print(request.form["test0"])
+                    #print(request.form["test1"])
+
+                    # TODO - next create a function to read from each question 
+                    # and save the number as a defaul, so page refreshes with same num
 
             return render_template("newquiz.html", message = message)
+        else:
+            return render_template("homepage.html", message = "Welcome!")
+
+
+
+@app.route("/quizsetup", methods = ["GET", "POST"])
+def quizsetup():
+        if "username" in session:
+            g.user = session["username"]
+            
+            # sets the number of questions to a static number of 2
+            user_id = model.get_id(g.user)
+            selection = model.get_selections(user_id)
+            message = ""
+
+            if request.method == "POST":
+                
+                #number = model.get_valid_num(request.form["number"])
+                #if number >= 1:
+                
+                
+                message = f"<h3>Now editing:<br> <u><strong>{request.form['test']}</strong></u></h3>"
+
+                
+                
+                    # tests the automatically incremented question numbers
+                    #print(request.form["number"])
+                    #print(request.form["test0"])
+                    #print(request.form["test1"])
+
+                    # TODO - next create a function to read from each question 
+                    # and save the number as a defaul, so page refreshes with same num
+
+            return render_template("quizsetup.html", selection = selection , message = message)
         else:
             return render_template("homepage.html", message = "Welcome!")
 

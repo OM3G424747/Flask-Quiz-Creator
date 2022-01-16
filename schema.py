@@ -116,4 +116,20 @@ cursor.close()
 connection.close()
 
 
+connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+cursor = connection.cursor()
+
+# Create Score Table
+cursor.execute(
+    """
+    CREATE TABLE active_test (
+        id_num INTEGER,
+        quiz_id INTEGER
+    );
+    """
+)
+connection.commit()
+cursor.close()
+connection.close()
+
 

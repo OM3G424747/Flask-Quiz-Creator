@@ -8,6 +8,7 @@ app.secret_key = "swordfish"
 
 username = ""
 user = model.check_users()
+test = ""
 
 @app.route("/", methods = ["GET", "POST"])
 def home():
@@ -86,14 +87,20 @@ def quizsetup():
             user_id = model.get_id(g.user)
             selection = model.get_selections(user_id)
             message = ""
+            #lists curent active session for ther user 
+            quiz_id = model.active_quiz(g.user)
+            test = ""
 
             if request.method == "POST":
                 
-                #number = model.get_valid_num(request.form["number"])
-                #if number >= 1:
+                # TODO - set so the quiz stays set to a sepcific quiz selection
+
+                if request.form['test'] != " ":
+                    g.test = request.form['test']
+                    print(f"selection changed to'{request.form['test']}'")
                 
                 
-                message = f"<h3>Now editing:<br> <u><strong>{request.form['test']}</strong></u></h3>"
+                message = f"<h3>Now editing:<br> <u><strong>{g.test}</strong></u></h3>"
 
                 
                 

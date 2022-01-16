@@ -88,22 +88,25 @@ def quizsetup():
             selection = model.get_selections(user_id)
             message = ""
             #lists curent active session for ther user 
+            #TODO - invert quiz_id into a quiz name
+
             quiz_id = model.active_quiz(g.user)
-            test = ""
+            quiz_name = model.get_quiz_name(quiz_id)
+            if quiz_name != -1:
+                message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"
 
             if request.method == "POST":
                 
                 # TODO - set so the quiz stays set to a sepcific quiz selection
 
-                if request.form['test'] != " ":
-                    g.test = request.form['test']
-                    print(f"selection changed to'{request.form['test']}'")
-                
-                
-                message = f"<h3>Now editing:<br> <u><strong>{g.test}</strong></u></h3>"
+                quiz_id = request.form['test']
 
-                
-                
+                model.active_quiz(g.user, quiz_id)
+
+                print(quiz_name)
+                print(quiz_id)
+                    
+
                     # tests the automatically incremented question numbers
                     #print(request.form["number"])
                     #print(request.form["test0"])

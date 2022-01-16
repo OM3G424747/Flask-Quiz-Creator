@@ -209,6 +209,70 @@ def createquiz( id_num, quiz_name, total_questions):
     return "Quiz creatred successfully."
 
 
+
+
+#passes -1 as a quiz_id
+#values of -1 indicate a query
+def active_quiz(email, quiz_id = -1):
+
+    user_id = get_id(email)
+
+    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        SELECT quiz_id
+        FROM active_test
+        WHERE id_num = {user_id};
+        """
+    )
+    
+    try:
+        result = cursor.fetchone()[0]
+    except:
+        # returns negative 1 to indicate an error
+        result = -1
+
+    # writes initial active quiz
+    if result == -1 and int(quiz_id) > 0:
+        cursor.execute(
+        f"""
+        INSERT INTO active_test(
+        id_num,
+        quiz_id
+        )
+
+        VALUES(
+        {user_id},
+        {quiz_id}
+        );
+        """
+        )
+
+    elif int(quiz_id) > 0:
+                cursor.execute(
+        f"""
+        UPDATE active_test
+        SET quiz_id = {quiz_id}
+        WHERE id_num = {user_id};
+        """
+        )
+
+    
+    else:
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return result
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return quiz_id
+
+
+
+
 # returns list of quizes available for editing
 def get_selections(id_num):
     #sqlite> SELECT isadmin
@@ -220,7 +284,7 @@ def get_selections(id_num):
     result = ""
     cursor.execute(
         f"""
-        SELECT quiz_name
+        SELECT quiz_id, quiz_name
         FROM quiz
         WHERE id_num = {id_num};
         """
@@ -242,11 +306,33 @@ def get_selections(id_num):
 
 
     for test in result:
-        selections += f"<option value='{test[0]}'>{test[0]}</option>"
+        selections += f"<option value='{test[0]}'>{test[1]}</option>"
 
     selections += "</select>"
 
     return selections
+
+
+def get_quiz_name(quiz_id):
+    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        SELECT quiz_name
+        FROM quiz
+        WHERE quiz_id = '{quiz_id}';
+        """
+    )
+
+    try:
+        result = cursor.fetchone()[0]
+    except:
+        # returns negative 1 to indicate an error
+        result = -1
+
+    return result
+
+
 
 
 # generates a random password
@@ -302,3 +388,5 @@ def set_password():
     password += str(randint(1, 100))
 
     return password
+
+

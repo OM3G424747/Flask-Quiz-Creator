@@ -210,9 +210,8 @@ def createquiz( id_num, quiz_name, total_questions):
 
 
 
-
-#passes -1 as a quiz_id
-#values of -1 indicate a query
+#passing only email indicates a query
+#passes -1 as a quiz_id for default query to only return a result
 def active_quiz(email, quiz_id = -1):
 
     user_id = get_id(email)
@@ -233,15 +232,14 @@ def active_quiz(email, quiz_id = -1):
         # returns negative 1 to indicate an error
         result = -1
 
-    # writes initial active quiz
-    if result == -1 and int(quiz_id) > 0:
+    # writes initial active quiz if no active quiz is listed yet
+    if result == -1 and int(quiz_id) >= 0:
         cursor.execute(
         f"""
         INSERT INTO active_test(
         id_num,
         quiz_id
         )
-
         VALUES(
         {user_id},
         {quiz_id}
@@ -249,8 +247,8 @@ def active_quiz(email, quiz_id = -1):
         """
         )
 
-    elif int(quiz_id) > 0:
-                cursor.execute(
+    elif result != -1 and int(quiz_id) >= 0:
+        cursor.execute(
         f"""
         UPDATE active_test
         SET quiz_id = {quiz_id}
@@ -258,7 +256,6 @@ def active_quiz(email, quiz_id = -1):
         """
         )
 
-    
     else:
         connection.commit()
         cursor.close()
@@ -390,3 +387,4 @@ def set_password():
     return password
 
 
+print(active_quiz("chris.joubert@mogi-group.com", 3))

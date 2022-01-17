@@ -83,39 +83,32 @@ def quizsetup():
         if "username" in session:
             g.user = session["username"]
             
-            # sets the number of questions to a static number of 2
+            message = ""
+            quiz_id = model.active_quiz(g.user)
             user_id = model.get_id(g.user)
             selection = model.get_selections(user_id)
-            message = ""
-            #lists curent active session for ther user 
-            #TODO - invert quiz_id into a quiz name
-
-            quiz_id = model.active_quiz(g.user)
             quiz_name = model.get_quiz_name(quiz_id)
+
+            questions = "<p>THIS IS A PLACEHOLDER!</p>"
+
             if quiz_name != -1:
                 message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"
 
-            if request.method == "POST":
-                
-                # TODO - set so the quiz stays set to a sepcific quiz selection
+
+            if request.method == "GET":
+                quiz_id = model.active_quiz(g.user)
+
+            else:
 
                 quiz_id = request.form['test']
 
+                #updates selected quiz for next render
                 model.active_quiz(g.user, quiz_id)
+                quiz_name = model.get_quiz_name(quiz_id)
+                message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"
 
-                print(quiz_name)
-                print(quiz_id)
-                    
+            return render_template("quizsetup.html", selection = selection , message = message, questions = questions)
 
-                    # tests the automatically incremented question numbers
-                    #print(request.form["number"])
-                    #print(request.form["test0"])
-                    #print(request.form["test1"])
-
-                    # TODO - next create a function to read from each question 
-                    # and save the number as a defaul, so page refreshes with same num
-
-            return render_template("quizsetup.html", selection = selection , message = message)
         else:
             return render_template("homepage.html", message = "Welcome!")
 

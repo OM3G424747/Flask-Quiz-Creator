@@ -1,6 +1,8 @@
 import sqlite3
 from random import randint
 
+from demo import quizsetup
+
 def get_id(email):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -387,4 +389,24 @@ def set_password():
     return password
 
 
-print(active_quiz("chris.joubert@mogi-group.com", 3))
+
+# test for changing active quiz
+#print(active_quiz("chris.joubert@mogi-group.com", 3))
+
+
+
+#TODO continue here, convert into a function for populating page with correct number of questions
+
+#SELECT total_questions
+#FROM quiz
+#WHERE quiz_id = {inset quiz ID here}
+
+#TODO, INSERT questions to match the number selected!
+
+#TODO, after initial insert, UPDATE
+
+#CREATE TABLE question (
+        #question_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        #quiz_id INTEGER,
+        #questions_text VARCHAR(255),
+        #total_options INTEGER

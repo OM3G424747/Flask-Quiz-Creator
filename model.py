@@ -1,8 +1,6 @@
 import sqlite3
 from random import randint
 
-from demo import quizsetup
-
 def get_id(email):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -319,7 +317,7 @@ def get_quiz_name(quiz_id):
         f"""
         SELECT quiz_name
         FROM quiz
-        WHERE quiz_id = '{quiz_id}';
+        WHERE quiz_id = {quiz_id};
         """
     )
 
@@ -328,6 +326,9 @@ def get_quiz_name(quiz_id):
     except:
         # returns negative 1 to indicate an error
         result = -1
+    connection.commit()
+    cursor.close()
+    connection.close()
 
     return result
 
@@ -395,6 +396,71 @@ def set_password():
 
 
 
+#1) - confirm if questions are present
+#2) - if questions don't exist, add them for the number needed for that quiz
+#3) - if the questions do exist, confirm the number matches the number for the quiz
+#4) - if they don't match ADD / REMOVE 
+
+def update_questions(quiz_id):
+
+    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        SELECT total_questions
+        FROM quiz
+        WHERE quiz_id = {quiz_id};
+        """
+    )
+
+    try:
+        q_num = cursor.fetchone()[0]
+    except:
+        # returns negative 1 to indicate an error
+        q_num = -1
+    
+    cursor.execute(
+        f"""
+        SELECT question_id
+        FROM question
+        WHERE quiz_id = {quiz_id};
+        """
+    )
+
+    try:
+        q_array = cursor.fetchall()
+    except:
+        # returns negative 1 to indicate an error
+        q_array = -1
+
+    
+    if q_array == -1:
+        for i in range(q_num):
+            cursor.execute(
+                f"""
+                INSERT INTO question(
+                quiz_id,
+                question_text,
+                total_options
+                )
+                VALUES(
+                {quiz_id},
+                'NONE',
+                {i + 1}
+                )
+                """
+            )
+    else:
+        print("Already added")
+
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+    
+
+
+
 #TODO continue here, convert into a function for populating page with correct number of questions
 
 #SELECT total_questions
@@ -410,3 +476,5 @@ def set_password():
         #quiz_id INTEGER,
         #questions_text VARCHAR(255),
         #total_options INTEGER
+
+print(update_questions(1))

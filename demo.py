@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g
-import model
+import model, forms
 
 app = Flask(__name__)
 
-# Placeholder secret key, to be replaced later
+# TODO - Placeholder secret key, to be replaced later
 app.secret_key = "swordfish"
 
 username = ""
@@ -64,13 +64,6 @@ def newquiz():
 
                 message = model.createquiz(user_id, quiz_name, question_num)
                 
-                    # tests the automatically incremented question numbers
-                    #print(request.form["number"])
-                    #print(request.form["test0"])
-                    #print(request.form["test1"])
-
-                    # TODO - next create a function to read from each question 
-                    # and save the number as a defaul, so page refreshes with same num
 
             return render_template("newquiz.html", message = message)
         else:
@@ -86,10 +79,13 @@ def quizsetup():
             message = ""
             quiz_id = model.active_quiz(g.user)
             user_id = model.get_id(g.user)
-            selection = model.get_selections(user_id)
+            
+            # displays the selection of available quizes for the user
+            selection = forms.get_selections(user_id)
             quiz_name = model.get_quiz_name(quiz_id)
 
-            questions = "<p>THIS IS A PLACEHOLDER!</p>"
+            # replace int with number of questions user selected for specific quiz
+            questions = forms.set_question(3) 
 
             if quiz_name != -1:
                 message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"

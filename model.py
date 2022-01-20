@@ -344,10 +344,14 @@ def set_password():
 #3) - if the questions do exist, confirm the number matches the number for the quiz
 #4) - if they don't match ADD / REMOVE 
 
+# function user to update DB with 
+# total number of questions to be displayed
 def update_questions(quiz_id):
 
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
+    
+    # gets total question value for selected quiz
     cursor.execute(
         f"""
         SELECT total_questions
@@ -362,6 +366,7 @@ def update_questions(quiz_id):
         # returns negative 1 to indicate an error
         q_num = -1
     
+    # test if questions are added for selected quiz yet
     cursor.execute(
         f"""
         SELECT question_id
@@ -376,7 +381,8 @@ def update_questions(quiz_id):
         # returns negative 1 to indicate an error
         q_array = -1
 
-    
+    # if no questions are added yet, questions are added
+    # default value for question text is set to none
     if q_array == -1:
         for i in range(q_num):
             cursor.execute(
@@ -396,6 +402,9 @@ def update_questions(quiz_id):
     else:
         print("Already added")
 
+# TODO - add section to test if number of questions match the total that should be there
+# for example, remove questions if the user changed the total from 12 to 10
+# or add default questions if the user selected to add more
 
     connection.commit()
     cursor.close()

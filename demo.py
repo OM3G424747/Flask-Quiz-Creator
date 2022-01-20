@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g
-import model
+import model, forms
 
 app = Flask(__name__)
 
@@ -86,7 +86,7 @@ def quizsetup():
             message = ""
             quiz_id = model.active_quiz(g.user)
             user_id = model.get_id(g.user)
-            selection = model.get_selections(user_id)
+            selection = forms.get_selections(user_id)
             quiz_name = model.get_quiz_name(quiz_id)
 
             questions = "<p>THIS IS A PLACEHOLDER!</p>"

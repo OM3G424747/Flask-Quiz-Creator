@@ -127,26 +127,7 @@ def signup(username, password, email, firstname, lastname, displayname):
     return "User registered successfully."
 
 
-def set_question(num_of_questions):
 
-    html_to_return = ""
-    num = 0
-
-    try:
-        num = int(num_of_questions)
-    except:
-        num = 0
-
-    for i in range(num):
-
-        html_to_return += f"""
-        <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-        <textarea class="form-control" name="test{i}" rows="3"></textarea>
-        </div>
-        """
-
-    return html_to_return
 
 
 def get_valid_num(num):
@@ -270,44 +251,6 @@ def active_quiz(email, quiz_id = -1):
 
 
 
-# returns list of quizes available for editing
-def get_selections(id_num):
-    #sqlite> SELECT isadmin
-    #...> FROM users
-    #...> WHERE email = '{email}';
-    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
-    cursor = connection.cursor()
-    
-    result = ""
-    cursor.execute(
-        f"""
-        SELECT quiz_id, quiz_name
-        FROM quiz
-        WHERE id_num = {id_num};
-        """
-    )
-    try:
-        result = cursor.fetchall()
-
-    except:
-        # returns negative 1 to indicate an error
-        result = -1
-
-    connection.commit()
-    cursor.close()
-    connection.close()
-
-    selections = '<label for="exampleFormControlInput1" class="form-label">Select Quiz: </label>'
-    selections += '<select name="test" onchange="this.form.submit();">'
-    selections += "<option value=' '> </option>"
-
-
-    for test in result:
-        selections += f"<option value='{test[0]}'>{test[1]}</option>"
-
-    selections += "</select>"
-
-    return selections
 
 
 def get_quiz_name(quiz_id):

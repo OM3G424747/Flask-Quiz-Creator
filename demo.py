@@ -83,9 +83,10 @@ def quizsetup():
             # displays the selection of available quizes for the user
             selection = forms.get_selections(user_id)
             quiz_name = model.get_quiz_name(quiz_id)
+            total_questions = model.get_total_questions(quiz_id)
 
             # replace int with number of questions user selected for specific quiz
-            questions = forms.set_question(3) 
+            questions = forms.set_question(total_questions) 
 
             if quiz_name != -1:
                 message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"
@@ -97,6 +98,9 @@ def quizsetup():
             else:
 
                 quiz_id = request.form['test']
+
+                for i in range(total_questions):
+                    print(request.form['question1'])
 
                 #updates selected quiz for next render
                 model.active_quiz(g.user, quiz_id)

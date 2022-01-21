@@ -40,7 +40,7 @@ def get_selections(id_num):
 
 # returns HTML code forms with a total of 3 lines
 # used to create multiple blank field to fill in
-# name for forms are test + question number (eg, Question 3 = test3)
+# name for forms are question + question number (eg, Question 3 = question3)
 def set_question(num_of_questions):
 
     html_to_return = ""
@@ -53,10 +53,11 @@ def set_question(num_of_questions):
 
     for i in range(num):
         
+        #TODO - update name so form request accurately identifies field 
         html_to_return += f"""
         <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Question {i + 1}</label>
-        <textarea class="form-control" name="test{i + 1}" rows="3"></textarea>
+        <textarea class="form-control" name="question{1}" rows="3"></textarea>
         </div>
         """
 

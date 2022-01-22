@@ -22,6 +22,7 @@ def get_valid_num(num):
 
 # generates a random password
 # used for first time account creation
+# used for password resets 
 def set_password():
 
     colour_list = ["Red", "Yellow", "Blue", "Brown", 
@@ -75,8 +76,7 @@ def set_password():
     return password
 
 
-
-
+# returs the user id of the selected email 
 def get_id(email):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -97,6 +97,7 @@ def get_id(email):
     return message
 
 
+# confirms if the correct password was entered 
 def check_pass(email):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -121,6 +122,7 @@ def check_pass(email):
     return result
 
 
+# returns a list for all current emails 
 def check_users():
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -204,8 +206,7 @@ def signup(username, password, email, firstname, lastname, displayname):
 
 
 
-
-# used to sign up a new user
+# used to create a new quiz
 def createquiz( id_num, quiz_name, total_questions):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -251,9 +252,9 @@ def createquiz( id_num, quiz_name, total_questions):
     return "Quiz creatred successfully."
 
 
-
-#passing only email indicates a query
-#passes -1 as a quiz_id for default query to only return a result
+# used to query quizes created by the active user
+# passing only email indicates a query
+# passes -1 as a quiz_id for default query to only return a result
 def active_quiz(email, quiz_id = -1):
 
     user_id = get_id(email)
@@ -310,10 +311,7 @@ def active_quiz(email, quiz_id = -1):
     return quiz_id
 
 
-
-
-
-
+# user to return the name of the quiz associated with the quiz id
 def get_quiz_name(quiz_id):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -337,7 +335,7 @@ def get_quiz_name(quiz_id):
     return result
 
 
-
+# user to return the number of total questions associated with the quiz id
 def get_total_questions(quiz_id):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -359,13 +357,6 @@ def get_total_questions(quiz_id):
     connection.close()
 
     return result
-
-
-
-
-# test for changing active quiz
-#print(active_quiz("chris.joubert@mogi-group.com", 3))
-
 
 
 #1) - confirm if questions are present

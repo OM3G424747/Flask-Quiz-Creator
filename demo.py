@@ -10,6 +10,7 @@ username = ""
 user = model.check_users()
 test = ""
 
+# homepage
 @app.route("/", methods = ["GET", "POST"])
 def home():
     if "username" in session:
@@ -21,14 +22,15 @@ def home():
     return render_template("homepage.html", message = "Welcome!")
     
 
-
+# confirms the user is corrently signed in
 @app.before_request
 def before_request():
     g.username = None
     if "username" in session:
         g.username = session["username"]
 
-# adds path to the hosted page (localhost7000/dashboard)
+
+# main dashboard of the signed in user 
 @app.route("/dashboard", methods = ["GET"])
 def dashboard():
         if "username" in session:
@@ -45,7 +47,7 @@ def dashboard():
             return render_template("homepage.html", message = "Welcome!")
 
 
-# adds path to the hosted page (localhost7000/dashboard)
+# adds a new quiz under the signed in user 
 @app.route("/newquiz", methods = ["GET", "POST"])
 def newquiz():
         if "username" in session:
@@ -56,8 +58,6 @@ def newquiz():
 
             if request.method == "POST":
                 
-                #number = model.get_valid_num(request.form["number"])
-                #if number >= 1:
                 user_id = model.get_id(g.user)
                 quiz_name = request.form["testname"]
                 question_num = request.form["number"]
@@ -71,6 +71,7 @@ def newquiz():
 
 
 
+# page for setting up the questions in the the selected quiz
 @app.route("/quizsetup", methods = ["GET", "POST"])
 def quizsetup():
         if "username" in session:
@@ -80,13 +81,13 @@ def quizsetup():
             quiz_id = model.active_quiz(g.user)
             user_id = model.get_id(g.user)
             
+            # replace int with number of questions user selected for specific quiz
+            total_questions = model.get_total_questions(quiz_id)
+            questions = forms.set_question(total_questions)
+            
             # displays the selection of available quizes for the user
             selection = forms.get_selections(user_id)
             quiz_name = model.get_quiz_name(quiz_id)
-            total_questions = model.get_total_questions(quiz_id)
-
-            # replace int with number of questions user selected for specific quiz
-            questions = forms.set_question(total_questions) 
 
             if quiz_name != -1:
                 message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"
@@ -96,11 +97,13 @@ def quizsetup():
                 quiz_id = model.active_quiz(g.user)
 
             else:
-
-                quiz_id = request.form['test']
-
+                
+                # access before updating quiz_id
                 for i in range(total_questions):
-                    print(request.form['question1'])
+                    print( f"this is the result { request.form[f'question{i+1}'] } " )
+
+                # accessing updates quiz id and changes the value of "total_questions"
+                quiz_id = request.form['test']
 
                 #updates selected quiz for next render
                 model.active_quiz(g.user, quiz_id)
@@ -112,7 +115,7 @@ def quizsetup():
         else:
             return render_template("homepage.html", message = "Welcome!")
 
-
+# login page for users to login
 @app.route("/login", methods = ["GET", "POST"])
 def login():
     message = ""
@@ -132,7 +135,7 @@ def login():
     return render_template("login.html", message = message)
     
 
-
+# sign up page for creating a new user 
 @app.route("/signup", methods = ["GET", "POST"])
 def signup():
     if request.method == "GET":
@@ -149,16 +152,19 @@ def signup():
         message = model.signup(username, password, email, firstname, lastname, displayname)
         return render_template("signup.html", message = message)
 
+# confirms if the user has an active session 
 @app.route("/getsession")
 def get_session():
     if username in session:
         return session["username"]
     return redirect(url_for("login"))
 
+# logout the current user 
 @app.route("/logout")
 def logout():
     session.pop("username", None)
     return redirect(url_for("home"))
 
+# sets the localhost port
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port = 5000, debug = True)

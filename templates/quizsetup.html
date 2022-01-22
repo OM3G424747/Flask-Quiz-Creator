@@ -31,9 +31,7 @@
             <label for="exampleFormControlInput1" class="form-label">Number of questions</label>
             <input type="number" class="form-control" name="number" placeholder="Number of questions" onchange="this.form.submit();">
         </div>
-    </form>
 
-    <form action="/quizsetup" method="post"></form>
         <!--- update section to include function to display questions for selected quiz --->
         {{questions | safe}}
         

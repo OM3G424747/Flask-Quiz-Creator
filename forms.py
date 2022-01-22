@@ -53,12 +53,16 @@ def set_question(num_of_questions):
 
     for i in range(num):
         
+        name = f"question{i+1}"
+        print(name)
         #TODO - update name so form request accurately identifies field 
+        #temporarly changed to "question" on name field for testing purposes 
         html_to_return += f"""
         <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Question {i + 1}</label>
-        <textarea class="form-control" name="question{1}" rows="3"></textarea>
+        <textarea class="form-control" name="{name}" rows="3"></textarea>
         </div>
         """
+
 
     return html_to_return

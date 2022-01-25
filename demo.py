@@ -86,29 +86,42 @@ def quizsetup():
             questions = forms.set_question(total_questions)
             
             # displays the selection of available quizes for the user
-            selection = forms.get_selections(user_id)
             quiz_name = model.get_quiz_name(quiz_id)
 
+            selection = forms.get_selections(user_id, quiz_name)
+            
             if quiz_name != -1:
-                message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"
+                message = f"<h3>Now editing:<br> <u><strong>{quiz_name}<br>Total Questions:{total_questions}</strong></u></h3>"
 
 
             if request.method == "GET":
                 quiz_id = model.active_quiz(g.user)
 
+            # updates page to displays the users' selection
+            # also update DB with users' data
             else:
-                
+
                 # access before updating quiz_id
                 for i in range(total_questions):
+                    print
                     print( f"this is the result { request.form[f'question{i+1}'] } " )
 
                 # accessing updates quiz id and changes the value of "total_questions"
                 quiz_id = request.form['test']
+                
+                # displays the selection of available quizes for the user
+                quiz_name = model.get_quiz_name(quiz_id)
+
+                selection = forms.get_selections(user_id, quiz_name)
 
                 #updates selected quiz for next render
                 model.active_quiz(g.user, quiz_id)
                 quiz_name = model.get_quiz_name(quiz_id)
-                message = f"<h3>Now editing:<br> <u><strong>{quiz_name}</strong></u></h3>"
+                # replace int with number of questions user selected for specific quiz
+                total_questions = model.get_total_questions(quiz_id)
+                questions = forms.set_question(total_questions)
+                # message to be displayed at top of page as a header
+                message = f"<h3>Now editing:<br> <u><strong>{quiz_name}<br>Total Questions:{total_questions}</strong></u></h3>"
 
             return render_template("quizsetup.html", selection = selection , message = message, questions = questions)
 
@@ -147,7 +160,12 @@ def signup():
         email = request.form["email"]
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
-        displayname = request.form["displayname"]
+
+        try:
+            displayname = request.form["displayname"]
+
+        except:
+            displayname = "False"
 
         message = model.signup(username, password, email, firstname, lastname, displayname)
         return render_template("signup.html", message = message)

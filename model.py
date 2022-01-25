@@ -218,6 +218,8 @@ def createquiz( id_num, quiz_name, total_questions):
         """
     )
     
+
+    #TODO troubleshoot bug here preventing new tests for being created on nginx server
     try:
         result = cursor.fetchone()[0]
     except:

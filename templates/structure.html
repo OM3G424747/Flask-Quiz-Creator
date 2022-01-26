@@ -9,11 +9,11 @@
     
 
     <!-- Bootstrap core CSS -->
-<link href="https://getbootstrap.com/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- Favicons -->
 
-<meta name="theme-color" content="#7952b3">
+    <meta name="theme-color" content="#7952b3">
 
 
     <style>
@@ -30,6 +30,13 @@
           font-size: 3.5rem;
         }
       }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
     </style>
 
     
@@ -37,7 +44,62 @@
     <link href="https://getbootstrap.com/docs/5.1/examples/sign-in/signin.css" rel="stylesheet">
     </head>
     <body class="text-center">
-        {% block main %}
+      
+      <!-- Canvas to add a 3D animated background -->
+      <canvas id="bg"></canvas>
+      <script src="https://threejs.org/build/three.js"></script>
+      
+      
+      <!-- Script for 3D geometry test  -->
+      <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+    
+
+        var renderer = new THREE.WebGLRenderer({
+          canvas: document.querySelector('#bg'),
+          alpha: true,
+        });
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+
+        var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        var material = new THREE.MeshStandardMaterial( { color: 0x63ff47 } );
+        var cube = new THREE.Mesh( geometry, material );
+        scene.add( cube );
+
+        var pointLight = new THREE.PointLight(0xffffff);
+        pointLight.position.set(1, 1, 1);
+
+        var ambientLight = new THREE.AmbientLight(0xffffff);
+        scene.add(pointLight, ambientLight);
+
+        camera.position.z = 7;
+        
+
+        var animate = function () {
+          requestAnimationFrame( animate );
+
+          cube.rotation.x += 0.01;
+          cube.rotation.y += 0.01;
+
+          cube.position.x = 0;
+          cube.position.y = 2.5;
+
+          renderer.render( scene, camera );
+        };
+
+        animate();
+
+      </script>
+      
+      
+
+      
+      {% block main %}
+
+        
             <main class="form-signin">
             <form>
                 <img class="mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
@@ -64,5 +126,7 @@
 
 
         {% endblock main %}
+
+
     </body>
 </html>

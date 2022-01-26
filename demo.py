@@ -156,6 +156,8 @@ def signup():
         return render_template("signup.html", message = message)
     else:
         username = request.form["username"]
+        
+        #TODO - update to not accept blank passowrds
         password = request.form["password"]
         email = request.form["email"]
         firstname = request.form["firstname"]

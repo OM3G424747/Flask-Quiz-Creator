@@ -154,6 +154,7 @@ def check_users():
 
 
 # used to sign up a new user
+# TODO - include conditions to check password as not being blank
 def signup(username, password, email, firstname, lastname, displayname):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()

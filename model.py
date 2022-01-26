@@ -1,3 +1,4 @@
+from ast import Not
 import sqlite3
 from random import randint
 
@@ -172,7 +173,24 @@ def signup(username, password, email, firstname, lastname, displayname):
         # returns negative 1 to indicate an error
         result = -1
 
-    if result == -1:
+    is_blank = False
+    if not (len(username.strip())):
+        is_blank = True
+    
+    if not (len(password.strip())):
+        is_blank = True
+
+    if not (len(firstname.strip())):
+        is_blank = True
+
+    if not (len(lastname.strip())):
+        is_blank = True
+
+    if not (len(email.strip())):
+        is_blank = True
+
+
+    if result == -1 and not is_blank:
         cursor.execute(
         f"""
         INSERT INTO users(
@@ -194,6 +212,10 @@ def signup(username, password, email, firstname, lastname, displayname):
         );
         """
         )
+    
+    elif is_blank:
+        return "Fields cannot be left blank."
+    
     else:
         connection.commit()
         cursor.close()
@@ -227,7 +249,14 @@ def createquiz( id_num, quiz_name, total_questions):
         # returns negative 1 to indicate an error
         result = -1
 
-    if result == -1:
+    is_blank = False
+    if not (len(quiz_name.strip())):
+        is_blank = True
+    
+    if not (len(total_questions.strip())):
+        is_blank = True
+
+    if result == -1 and not is_blank:
         cursor.execute(
         f"""
         INSERT INTO quiz(
@@ -243,6 +272,10 @@ def createquiz( id_num, quiz_name, total_questions):
         );
         """
         )
+    
+    elif is_blank:
+        return "Please enter a name and number of questions"
+    
     else:
         connection.commit()
         cursor.close()
@@ -451,5 +484,3 @@ def update_questions(quiz_id):
         #quiz_id INTEGER,
         #questions_text VARCHAR(255),
         #total_options INTEGER
-
-print(update_questions(1))

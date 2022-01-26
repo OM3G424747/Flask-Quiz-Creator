@@ -46,6 +46,7 @@ def get_selections(id_num, active_quiz):
 # used to create multiple blank field to fill in
 # name for forms are question + question number (eg, Question 3 = question3)
 def set_question(num_of_questions):
+    # TODO update to pass array of current quiz data and selection
 
     html_to_return = ""
     num = 0
@@ -77,8 +78,8 @@ def set_question(num_of_questions):
         <br>
         """
 
-        # TODO - include HTML for user options per question
-        # for example - "True or Flase questions?"
+        # TODO update HTML for user options if more are needed 
+        # TODO update <option> inside to "select" for selected option 
 
 
     return html_to_return

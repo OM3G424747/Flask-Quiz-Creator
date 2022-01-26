@@ -69,10 +69,10 @@ def set_question(num_of_questions):
         <label for="exampleFormControlTextarea1" class="form-label">Question {i + 1}</label>
         <textarea class="form-control" name="{q_name}" rows="3"></textarea>
         <br>
-        <label for="exampleFormControlInput1" class="form-label">Answer Type: </label>
+        <label for="exampleFormControlInput1" class="form-label">Question Type: </label>
         <select name="{opt_name}">
         <option value='True'>True or False</option>
-        <option value='False'>1 to 5 scale</option>
+        <option value='False'>1 to 5 Scale</option>
         </select>
         </div>
         <br>

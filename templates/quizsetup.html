@@ -24,15 +24,6 @@
     <br>
     <br>
         
-        <!--- Fields kept for test purposes ONLY! --->
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Testname</label>
-            <input type="text" class="form-control" name="testname" placeholder="Testname">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Number of questions</label>
-            <input type="number" class="form-control" name="number" placeholder="Number of questions">
-        </div>
 
         <!--- update section to include function to display questions for selected quiz --->
         {{questions | safe}}
@@ -44,7 +35,17 @@
 
     
     <br>
-    <a href="/dashboard">Dashboard</a>
+    <a href="/dashboard">
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Dashboard</button>
+    </a>
+
+    <div style="position: fixed; bottom: 1%; left: 1%;">
+
+        <br>
+        <br>
+        <p class="mt-5 mb-3 ">Chris Joubert &copy; 2022</p>
+        
+    </div>
 </main> 
 
 {% endblock main %}

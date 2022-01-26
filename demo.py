@@ -36,13 +36,19 @@ def dashboard():
         if "username" in session:
             g.user = session["username"]
             message = "<img src = static/img/8Hi2.gif>"
-            admin_message = ""
-            if session["username"] == "chris":
-                admin_message = "You're the admin"
-            else:
-                message += f" "
 
-            return render_template("dashboard.html", message = message + admin_message)
+            user_id = model.get_id(g.user)
+            
+            button = ""
+            # creates a new button after the user creates their first quiz
+            if model.has_created( user_id ) != -1:
+                button = """
+                    <a href="/quizsetup">
+                    <button class="w-100 btn btn-lg btn-primary" id="floatingInput">Edit Quiz</button>
+                    </a>
+                    """
+
+            return render_template("dashboard.html", message = message, button = button)
         else:
             return render_template("homepage.html", message = "Welcome!")
 
@@ -52,9 +58,20 @@ def dashboard():
 def newquiz():
         if "username" in session:
             g.user = session["username"]
+            user_id = model.get_id(g.user)
             
             # sets the number of questions to a static number of 2
             message = ""
+
+            button = ""
+            # creates a new button after the user creates their first quiz
+            if model.has_created( user_id ) != -1:
+                button = """
+                    <a href="/quizsetup">
+                    <button class="w-100 btn btn-lg btn-primary" id="floatingInput">Edit Quiz</button>
+                    </a>
+                    """
+
 
             if request.method == "POST":
                 
@@ -63,9 +80,16 @@ def newquiz():
                 question_num = request.form["number"]
 
                 message = model.createquiz(user_id, quiz_name, question_num)
+
+                if model.has_created( user_id ) != -1:
+                    button = """
+                        <a href="/quizsetup">
+                        <button class="w-100 btn btn-lg btn-primary" id="floatingInput">Edit Quiz</button>
+                        </a>
+                        """
                 
 
-            return render_template("newquiz.html", message = message)
+            return render_template("newquiz.html", message = message, button = button)
         else:
             return render_template("homepage.html", message = "Welcome!")
 
@@ -80,6 +104,10 @@ def quizsetup():
             message = ""
             quiz_id = model.active_quiz(g.user)
             user_id = model.get_id(g.user)
+            
+            # defaults rendered quiz to first quiz on user's list
+            if quiz_id == -1:
+                quiz_id = model.get_quiz_id(user_id)[0][0]
             
             # replace int with number of questions user selected for specific quiz
             total_questions = model.get_total_questions(quiz_id)

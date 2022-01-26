@@ -467,6 +467,45 @@ def update_questions(quiz_id):
     connection.close()
     
 
+def has_created( user_id ):
+    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        SELECT quiz_name
+        FROM quiz
+        WHERE id_num = {user_id};
+        """
+    )
+
+    try:
+        result = cursor.fetchone()[0]
+    except:
+        # returns negative 1 to indicate an error
+        result = -1
+    
+    return result
+
+
+
+# used to return a list of all quizes created by the user
+def get_quiz_id( id_num ):
+    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        SELECT quiz_id
+        FROM quiz
+        WHERE id_num = {id_num};
+        """
+    )
+
+    try:
+        result = cursor.fetchall()
+    except:
+        # returns negative 1 to indicate an error
+        result = -1
+    return result
 
 
 #TODO continue here, convert into a function for populating page with correct number of questions
@@ -484,3 +523,4 @@ def update_questions(quiz_id):
         #quiz_id INTEGER,
         #questions_text VARCHAR(255),
         #total_options INTEGER
+

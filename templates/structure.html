@@ -68,7 +68,7 @@
         var cubeTexture = new THREE.TextureLoader().load('/static/img/moon.jpg');
         
         var geometry = new THREE.BoxGeometry( 2, 2, 2 );
-        var material = new THREE.MeshStandardMaterial( { color: 0x63ff47 } );
+        var material = new THREE.MeshStandardMaterial( { color: 0x8f51ff } );
         var cube = new THREE.Mesh( geometry, material );
         scene.add( cube );
 
@@ -96,8 +96,7 @@
           scene.add(star);
         }
 
-        Array(200).fill().forEach(addStar);
-
+        Array(300).fill().forEach(addStar);
 
         camera.position.z = 7;
         
@@ -110,7 +109,6 @@
 
           cube.position.x = 0;
           cube.position.y = 2.5;
-
 
           moon.rotation.x += 0.001;
           moon.position.x = 0;

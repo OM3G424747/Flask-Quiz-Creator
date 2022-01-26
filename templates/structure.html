@@ -64,10 +64,18 @@
         renderer.setSize( window.innerWidth, window.innerHeight );
         document.body.appendChild( renderer.domElement );
 
-        var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        
+        var cubeTexture = new THREE.TextureLoader().load('/static/img/moon.jpg');
+        
+        var geometry = new THREE.BoxGeometry( 2, 2, 2 );
         var material = new THREE.MeshStandardMaterial( { color: 0x63ff47 } );
         var cube = new THREE.Mesh( geometry, material );
         scene.add( cube );
+
+        var geometry = new THREE.SphereGeometry(4, 32, 32);
+        var material = new THREE.MeshBasicMaterial({ map: cubeTexture });
+        var moon = new THREE.Mesh( geometry, material );
+        scene.add( moon );
 
         var pointLight = new THREE.PointLight(0xffffff);
         pointLight.position.set(1, 1, 1);
@@ -86,6 +94,12 @@
 
           cube.position.x = 0;
           cube.position.y = 2.5;
+
+
+          moon.rotation.y += 0.001;
+          moon.position.x = -7;
+          moon.position.y = 2.5;
+          moon.position.z = -2;
 
           renderer.render( scene, camera );
         };

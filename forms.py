@@ -25,7 +25,7 @@ def get_selections(id_num, active_quiz):
     cursor.close()
     connection.close()
 
-    selections = '<label for="exampleFormControlInput1" class="form-label">Select Quiz: </label>'
+    selections = '<label for="exampleFormControlInput1" class="form-label"><strong>Select Quiz: </strong></label>'
     selections += '<select name="test" onchange="this.form.submit();">'
 
     for test in result:

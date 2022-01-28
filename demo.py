@@ -30,6 +30,53 @@ def before_request():
         g.username = session["username"]
 
 
+# login page for users to login
+@app.route("/login", methods = ["GET", "POST"])
+def login():
+    message = ""
+    if request.method == "POST":
+        session.pop("username", None)
+        areyouuser = request.form["email"]
+        pwd = request.form["password"]
+        if pwd == model.check_pass(areyouuser):
+            session["username"] = request.form["email"]
+            return redirect(url_for("dashboard"))
+        else:
+            # returns if login fails
+            message = "Wrong Username or Password"
+            return render_template("login.html", message = message)
+        
+        
+    return render_template("login.html", message = message)
+    
+
+# sign up page for creating a new user 
+@app.route("/signup", methods = ["GET", "POST"])
+def signup():
+    if request.method == "GET":
+        message = ""
+        return render_template("signup.html", message = message)
+    else:
+        username = request.form["username"]
+        
+        # passwords cannot be blank is only current requirement
+        # TODO improve password requirements 
+        password = request.form["password"]
+        email = request.form["email"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+
+        # returns true if checkbox is selected 
+        if request.form.get("displayname", False):
+            displayname = request.form["displayname"]
+
+        else: 
+            displayname = "False"
+
+        message = model.signup(username, password, email, firstname, lastname, displayname)
+        return render_template("signup.html", message = message)
+
+
 # main dashboard of the signed in user 
 @app.route("/dashboard", methods = ["GET"])
 def dashboard():
@@ -156,49 +203,7 @@ def quizsetup():
         else:
             return render_template("homepage.html", message = "Welcome!")
 
-# login page for users to login
-@app.route("/login", methods = ["GET", "POST"])
-def login():
-    message = ""
-    if request.method == "POST":
-        session.pop("username", None)
-        areyouuser = request.form["email"]
-        pwd = request.form["password"]
-        if pwd == model.check_pass(areyouuser):
-            session["username"] = request.form["email"]
-            return redirect(url_for("dashboard"))
-        else:
-            # returns if login fails
-            message = "Wrong Username or Password"
-            return render_template("login.html", message = message)
-        
-        
-    return render_template("login.html", message = message)
-    
 
-# sign up page for creating a new user 
-@app.route("/signup", methods = ["GET", "POST"])
-def signup():
-    if request.method == "GET":
-        message = ""
-        return render_template("signup.html", message = message)
-    else:
-        username = request.form["username"]
-        
-        #TODO - update to not accept blank passowrds
-        password = request.form["password"]
-        email = request.form["email"]
-        firstname = request.form["firstname"]
-        lastname = request.form["lastname"]
-
-        try:
-            displayname = request.form["displayname"]
-
-        except:
-            displayname = "False"
-
-        message = model.signup(username, password, email, firstname, lastname, displayname)
-        return render_template("signup.html", message = message)
 
 # confirms if the user has an active session 
 @app.route("/getsession")

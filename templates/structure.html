@@ -64,25 +64,32 @@
         renderer.setSize( window.innerWidth, window.innerHeight );
         document.body.appendChild( renderer.domElement );
 
-        
-        var cubeTexture = new THREE.TextureLoader().load('/static/img/moon.jpg');
-        
+        // adds cube geometry and textures
         var geometry = new THREE.BoxGeometry( 2, 2, 2 );
         var material = new THREE.MeshStandardMaterial( { color: 0x8f51ff } );
         var cube = new THREE.Mesh( geometry, material );
         scene.add( cube );
 
+        // adds moon geometry and textures
+        var moonTexture = new THREE.TextureLoader().load('/static/img/moon.jpg');
+        var moonNormal = new THREE.TextureLoader().load('/static/img/normal.jpg');
         var geometry = new THREE.SphereGeometry(4, 32, 32);
-        var material = new THREE.MeshBasicMaterial({ map: cubeTexture });
+        var material = new THREE.MeshBasicMaterial( { 
+          map: moonTexture,
+          normalMap: moonNormal
+          });
         var moon = new THREE.Mesh( geometry, material );
         scene.add( moon );
 
+        // sets scene lighting
         var pointLight = new THREE.PointLight(0xffffff);
-        pointLight.position.set(1, 1, 1);
+        pointLight.position.set(0, 0, 1);
 
-        var ambientLight = new THREE.AmbientLight(0xffffff);
+        var ambientLight = new THREE.AmbientLight(0xaaaaaa);
         scene.add(pointLight, ambientLight);
 
+        // creates function to add stars to scene 
+        // shape and texture for each star set in function
         function addStar() {
           const geometry = new THREE.SphereGeometry(0.25, 24, 24);
           const material = new THREE.MeshStandardMaterial({ color: 0x555555 });

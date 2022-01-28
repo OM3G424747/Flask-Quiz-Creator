@@ -176,10 +176,9 @@ def quizsetup():
             # also update DB with users' data
             else:
 
-                # access before updating quiz_id
+                # loops over entered results to update DB with changes 
                 for i in range(total_questions):
-                    print
-                    print( f"this is the result { request.form[f'question{i+1}'] } " )
+                    print( f"this is the result { request.form[f'question{i+1}'] } + {request.form[f'edit{i+1}']} " )
 
                 # accessing updates quiz id and changes the value of "total_questions"
                 quiz_id = request.form['test']

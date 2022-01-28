@@ -518,9 +518,79 @@ def get_quiz_id( id_num ):
 
 #TODO, after initial insert, UPDATE
 
+
+# retrieves array of IDs for questions of active quiz
+def get_question_id( quiz_id ):
+    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        SELECT question_id
+        FROM question
+        WHERE quiz_id = {quiz_id};
+        """
+    )
+
+    try:
+        result = cursor.fetchall()
+    except:
+        # returns negative 1 to indicate an error
+        result = -1
+    return result
+
+
+# retrieves array of IDs for questions of active quiz
+def set_question( quiz_id, questions_text, total_options, id_array, active_question ):
+    
+
+    #TODO - check array and append value to dictionary
+    #check with active question
+    #if active question value is not in dictionary, insert instead of update
+    
+    #TODO! - after adding option to delete questions
+    #if more values are left than there should be, DELETE
+
+    is_empty = False
+
+    if len(id_array) == 0:
+        is_empty = True
+
+
+    #TODO - pass number 
+    # creat dictionary numbered 1 - max number
+    # set each dictionary value with a corresponding ID
+    # when function is looped over the passed "i" value should access a new dictionary item with each loop
+
+    
+    
+    connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        INSERT INTO question(
+        quiz_id,
+        questions_text,
+        total_options
+        )
+        VALUES(
+        {quiz_id},
+        '{questions_text}',
+        {total_options}
+        );
+        """
+    )
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+
 #CREATE TABLE question (
         #question_id INTEGER PRIMARY KEY AUTOINCREMENT,
         #quiz_id INTEGER,
         #questions_text VARCHAR(255),
         #total_options INTEGER
+
+print(get_question_id(1))
 

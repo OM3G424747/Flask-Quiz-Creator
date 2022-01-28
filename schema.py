@@ -119,7 +119,7 @@ connection.close()
 connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
 cursor = connection.cursor()
 
-# Create Score Table
+# Create table for tracking tests last edited
 cursor.execute(
     """
     CREATE TABLE active_test (

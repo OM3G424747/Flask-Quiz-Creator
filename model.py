@@ -519,7 +519,8 @@ def get_quiz_id( id_num ):
 #TODO, after initial insert, UPDATE
 
 
-# retrieves array of IDs for questions of active quiz
+# returns a dictionary contain question IDs
+# question IDs are indexed starting from 0
 def get_question_id( quiz_id ):
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
@@ -533,14 +534,21 @@ def get_question_id( quiz_id ):
 
     try:
         result = cursor.fetchall()
+        dict_to_return = {}
+        for i in range(len(result)):
+            dict_to_return[i] = result[i][0]
+        
+        return dict_to_return
+
+
     except:
         # returns negative 1 to indicate an error
         result = -1
-    return result
+        return result
 
 
 # retrieves array of IDs for questions of active quiz
-def set_question( quiz_id, questions_text, total_options, id_array, active_question ):
+def set_question( quiz_id, questions_text, total_options, id_dict, active_question ):
     
 
     #TODO - check array and append value to dictionary
@@ -549,36 +557,40 @@ def set_question( quiz_id, questions_text, total_options, id_array, active_quest
     
     #TODO! - after adding option to delete questions
     #if more values are left than there should be, DELETE
+    print(len(id_dict))
 
-    is_empty = False
-
-    if len(id_array) == 0:
-        is_empty = True
-
-
-    #TODO - pass number 
-    # creat dictionary numbered 1 - max number
-    # set each dictionary value with a corresponding ID
-    # when function is looped over the passed "i" value should access a new dictionary item with each loop
-
-    
-    
     connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
     cursor = connection.cursor()
-    cursor.execute(
-        f"""
-        INSERT INTO question(
-        quiz_id,
-        questions_text,
-        total_options
+
+    if len(id_dict) > 0 and active_question <= len(id_dict):
+
+        cursor.execute(
+            f"""
+            UPDATE question
+            SET questions_text = {questions_text},
+            total_options = {total_options}
+            WHERE question_id = {id_dict[active_question]};
+            """
+            )
+    
+    elif active_question > len(id_dict):
+
+        connection = sqlite3.connect("flask_tut.db", check_same_thread = False)
+        cursor = connection.cursor()
+        cursor.execute(
+            f"""
+            INSERT INTO question(
+            quiz_id,
+            questions_text,
+            total_options
+            )
+            VALUES(
+            {quiz_id},
+            '{questions_text}',
+            {total_options}
+            );
+            """
         )
-        VALUES(
-        {quiz_id},
-        '{questions_text}',
-        {total_options}
-        );
-        """
-    )
 
     connection.commit()
     cursor.close()
@@ -592,5 +604,12 @@ def set_question( quiz_id, questions_text, total_options, id_array, active_quest
         #questions_text VARCHAR(255),
         #total_options INTEGER
 
-print(get_question_id(1))
 
+
+
+dict_test = {1:"test", 2:"test2", 3:"test3"}
+
+print(len(dict_test))
+
+for i in range(len(dict_test)):
+    print(i)

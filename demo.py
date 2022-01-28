@@ -175,9 +175,13 @@ def quizsetup():
             # updates page to displays the users' selection
             # also update DB with users' data
             else:
+                question_dict = model.get_question_id(quiz_id)
 
                 # loops over entered results to update DB with changes 
                 for i in range(total_questions):
+                    question_text = request.form[f'question{i+1}']
+                    answer_type = request.form[f'edit{i+1}']
+                    model.set_question(quiz_id, question_text, answer_type, question_dict, i )
                     print( f"this is the result { request.form[f'question{i+1}'] } + {request.form[f'edit{i+1}']} " )
 
                 # accessing updates quiz id and changes the value of "total_questions"
